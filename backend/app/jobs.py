@@ -150,10 +150,9 @@ def _run(job: Job) -> None:
         if _exec(job, _pdf_args(o)) != 0 or not job.pdf_path.exists():
             raise RuntimeError("Falha ao gerar o PDF.")
         job.status = "done"
-    except Exception as e:  # noqa: BLE001
+    except Exception as e: 
         job.status, job.error = "error", str(e)
     finally:
-        # Imagens intermediárias não são mais necessárias; só o PDF fica até expirar.
         for sub in ("front", "back", "double_sided"):
             shutil.rmtree(job.dir / "game" / sub, ignore_errors=True)
 
