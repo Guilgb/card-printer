@@ -143,6 +143,10 @@ def _run(job: Job) -> None:
         if _exec(job, _fetch_args(o)) != 0 or not any((job.dir / "game" / "front").iterdir()):
             raise RuntimeError("Falha ao buscar as cartas. Confira o formato da lista.")
         job.status = "building"
+        if o.only_fronts:
+            ds = job.dir / "game" / "double_sided"
+            shutil.rmtree(ds, ignore_errors=True)
+            ds.mkdir(parents=True, exist_ok=True)
         if _exec(job, _pdf_args(o)) != 0 or not job.pdf_path.exists():
             raise RuntimeError("Falha ao gerar o PDF.")
         job.status = "done"
